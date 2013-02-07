@@ -1,2 +1,8 @@
 *.pyc
 *~
+
+load-liquor-typesc
+
+# project files
+.project
+.pydevproject

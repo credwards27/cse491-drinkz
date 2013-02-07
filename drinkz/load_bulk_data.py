@@ -27,6 +27,9 @@ def load_bottle_types(fp):
     x = []
     n = 0
     for line in reader:
+        if not ''.join(line).strip():
+            continue
+        
         if line[0].startswith('#'):
             continue
         

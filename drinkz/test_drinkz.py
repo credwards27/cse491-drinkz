@@ -102,3 +102,11 @@ def test_get_liquor_inventory():
         x.append((mfg, liquor))
 
     assert x == [('Johnnie Walker', 'Black Label')], x
+
+def blank_lines_test():
+    db._reset_db()
+    data = "\nJohnnie Walker,Black Label,blended scotch"
+    fp = StringIO(data)
+    n = load_bulk_data.load_bottle_types(fp)
+    
+    assert db._check_bottle_type_exists('Johnnie Walker', 'Black Label')
