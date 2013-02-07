@@ -116,3 +116,12 @@ def blank_lines_test():
     assert db._check_bottle_type_exists('Johnnie Walker', 'Black Label')
     assert m == 1
     assert db.check_inventory('Johnnie Walker', 'Black Label')
+
+def test_exception_handlers():
+    db._reset_db()
+    data1 = "Alcohol Stuff,Johnnie Walker,Black Label,blended scotch"
+    data2 = "Black Label,blended scotch"
+    fp1 = StringIO(data1)
+    fp2 = StringIO(data2)
+    n = load_bulk_data.load_inventory(fp1)
+    m = load_bulk_data.load_bottle_types(fp2)

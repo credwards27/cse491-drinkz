@@ -27,9 +27,12 @@ def load_bottle_types(fp):
     x = []
     n = 0
     for line in new_reader:
-        (mfg, name, typ) = line
-        n += 1
-        db.add_bottle_type(mfg, name, typ)
+        try:
+            (mfg, name, typ) = line
+            n += 1
+            db.add_bottle_type(mfg, name, typ)
+        except ValueError:
+            print "New bottle types must have exactly 3 values per line: 'Manufacturer, Name, Type'"
 
     return n
 
@@ -51,9 +54,12 @@ def load_inventory(fp):
     x = []
     n = 0
     for (line) in new_reader:
-        (mfg, name, amount) = line
-        n += 1
-        db.add_to_inventory(mfg, name, amount)
+        try:
+            (mfg, name, amount) = line
+            n += 1
+            db.add_to_inventory(mfg, name, amount)
+        except ValueError:
+            print "New inventory items must have exactly 3 values per line: 'Manufacturer, Name, Type'"
 
     return n
 
@@ -68,3 +74,6 @@ def data_reader(fp):
             continue
         
         yield line
+
+class LineError(Exception):
+    pass
