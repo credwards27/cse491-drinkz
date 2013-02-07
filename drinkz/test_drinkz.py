@@ -128,3 +128,16 @@ def test_exception_handlers():
     
     assert not db._check_bottle_type_exists('Johnnie Walker', 'Black Label')
     assert not db.check_inventory('Johnnie Walker', 'Black Label')
+
+def test_new_amount():
+    db._reset_db()
+    
+    db.add_bottle_type('Johnnie Walker', 'Black Label', 'blended scotch')
+    db.add_bottle_type('Evan Williams', 'Cinnamon Reserve', 'kentucky liqueor')
+    
+    db.add_to_inventory('Johnnie Walker', 'Black Label', '1000 ml')
+    db.add_to_inventory('Evan Williams', 'Cinnamon Reserve', '2000 ml')
+    db.add_to_inventory('Johnnie Walker', 'Black Label', '40oz')
+    amount = db.get_liquor_amount('Johnnie Walker', 'Black Label')
+    
+    assert amount == "2182 ml"
