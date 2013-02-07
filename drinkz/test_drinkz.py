@@ -105,8 +105,14 @@ def test_get_liquor_inventory():
 
 def blank_lines_test():
     db._reset_db()
-    data = "\nJohnnie Walker,Black Label,blended scotch"
-    fp = StringIO(data)
-    n = load_bulk_data.load_bottle_types(fp)
+    data1 = "\nJohnnie Walker,Black Label,blended scotch"
+    data2 = "\nJohnnie Walker,Black Label,1000 ml"
+    fp1 = StringIO(data1)
+    fp2 = StringIO(data2)
+    n = load_bulk_data.load_bottle_types(fp1)
+    m = load_bulk_data.load_inventory(fp2)
     
+    assert n == 1
     assert db._check_bottle_type_exists('Johnnie Walker', 'Black Label')
+    assert m == 1
+    assert db.check_inventory('Johnnie Walker', 'Black Label')

@@ -56,7 +56,14 @@ def load_inventory(fp):
 
     x = []
     n = 0
-    for (mfg, name, amount) in reader:
+    for (line) in reader:
+        if not ''.join(line).strip():
+            continue
+        
+        if line[0].startswith('#'):
+            continue
+        
+        (mfg, name, amount) = line
         n += 1
         db.add_to_inventory(mfg, name, amount)
 
