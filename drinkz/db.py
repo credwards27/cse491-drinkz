@@ -63,7 +63,6 @@ def get_liquor_amount(mfg, liquor):
         
         total += vol
     
-    print str(int(total)) + " ml"
     return str(int(total)) + " ml"
 
 def get_liquor_inventory():
