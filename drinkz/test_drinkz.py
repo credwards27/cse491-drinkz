@@ -123,5 +123,8 @@ def test_exception_handlers():
     data2 = "Black Label,blended scotch"
     fp1 = StringIO(data1)
     fp2 = StringIO(data2)
-    n = load_bulk_data.load_inventory(fp1)
-    m = load_bulk_data.load_bottle_types(fp2)
+    n = load_bulk_data.load_bottle_types(fp1)
+    m = load_bulk_data.load_inventory(fp2)
+    
+    assert not db._check_bottle_type_exists('Johnnie Walker', 'Black Label')
+    assert not db.check_inventory('Johnnie Walker', 'Black Label')
