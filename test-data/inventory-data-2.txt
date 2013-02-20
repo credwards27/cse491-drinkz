@@ -1,0 +1,9 @@
+# This is an inventory data test file
+
+Johnnie Walker,Black Label,1000 ml
+Johnnie Walker,Black Label,40oz
+Johnnie Walker,Black Label,17 oz
+Johnnie Walker,Black Label,700ml
+
+# this file has, at the end, a blank line, which should be handled
+# (ignored!) by our loading script - just like these comments.

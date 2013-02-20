@@ -2,6 +2,7 @@
 *~
 
 load-liquor-typesc
+load-liquor-inventoryc
 
 # project files
 .project
