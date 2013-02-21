@@ -1,10 +1,15 @@
 """
 Database functionality for drinkz information.
+
+Recipes are stored in a dictionary for retrieval.
+Recipes are inherently name/value-paired objects(name, ingredient list), so a dictionary will be able to efficiently
+store and retrieve them.
 """
 
 # private singleton variables at module level
 _bottle_types_db = set()
 _inventory_db = {}
+_recipes_db = {}
 
 def _reset_db():
     "A method only to be used during testing -- toss the existing db info."
@@ -71,8 +76,14 @@ def _convert_to_ml(amt):
     
     return amt
 
-def add_exisint_liquor(mfg, liquor):
-    "Update the amount of a certain type of liquor"
+def add_recipe(r):
+    
+
+def get_recipe(name):
+    
+
+def get_all_recipes():
+    
 
 def get_liquor_inventory():
     "Retrieve all liquor types in inventory, in tuple form: (mfg, liquor)."

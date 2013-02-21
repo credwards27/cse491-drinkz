@@ -14,6 +14,8 @@ import imp
 
 from . import db, load_bulk_data
 
+from .recipes import Recipe
+
 def test_foo():
     # this test always passes; it's just to show you how it's done!
     print 'Note that output from passing tests is hidden'
@@ -130,6 +132,15 @@ def test_exception_handlers():
     assert not db.check_inventory('Johnnie Walker', 'Black Label')
 
 def test_new_amount():
+    """
+    This implicitly tests the milliliter conversion function in db.py
+    """
+    
+    init_db()
+    
+    assert amount == 2182.94
+
+def init_db():
     db._reset_db()
     
     db.add_bottle_type('Johnnie Walker', 'Black Label', 'blended scotch')
@@ -139,6 +150,10 @@ def test_new_amount():
     db.add_to_inventory('Evan Williams', 'Cinnamon Reserve', '2000 ml')
     db.add_to_inventory('Johnnie Walker', 'Black Label', '40oz')
     amount = db.get_liquor_amount('Johnnie Walker', 'Black Label')
+
+def test_recipes():
+    """
+    Tests adding recipes to the database
+    """
     
-    print amount
-    assert amount == 2182.94
+    r1 = Recipe("my name", [1,2,3])
