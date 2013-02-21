@@ -138,7 +138,8 @@ def test_new_amount():
     
     init_db()
     
-    assert amount == 2182.94
+    amount = db.get_liquor_amount('Johnnie Walker', 'Black Label')
+    assert amount == 2182.94, amount
 
 def init_db():
     db._reset_db()
@@ -149,11 +150,10 @@ def init_db():
     db.add_to_inventory('Johnnie Walker', 'Black Label', '1000 ml')
     db.add_to_inventory('Evan Williams', 'Cinnamon Reserve', '2000 ml')
     db.add_to_inventory('Johnnie Walker', 'Black Label', '40oz')
-    amount = db.get_liquor_amount('Johnnie Walker', 'Black Label')
 
 def test_recipes():
     """
     Tests adding recipes to the database
     """
     
-    r1 = Recipe('vodka martini', [('vodka', '6 oz'), ('vermouth', '1 oz')])
+    #r1 = Recipe('vodka martini', [('vodka', '6 oz'), ('vermouth', '1 oz')])
