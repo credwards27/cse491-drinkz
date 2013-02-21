@@ -156,4 +156,4 @@ def test_recipes():
     Tests adding recipes to the database
     """
     
-    r1 = Recipe("my name", [1,2,3])
+    r1 = Recipe('vodka martini', [('vodka', '6 oz'), ('vermouth', '1 oz')])

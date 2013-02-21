@@ -77,13 +77,13 @@ def _convert_to_ml(amt):
     return amt
 
 def add_recipe(r):
-    
+    "Add a recipe to the database"
 
 def get_recipe(name):
-    
+    "Retrieve a recipe from the database"
 
 def get_all_recipes():
-    
+    "Get a list of all recipes in the database that can be made from current inventory"
 
 def get_liquor_inventory():
     "Retrieve all liquor types in inventory, in tuple form: (mfg, liquor)."
