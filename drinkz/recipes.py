@@ -11,12 +11,23 @@ class Recipe(object):
     def need_ingredients(self):
         missing = []
         
-        for i in self.ingredients:
+        for (type, amt) in self.ingredients:
             # get a list of what types are in inventory
-            have_set = db.check_inventory_for_type(i[0])
+            have_types = db.check_inventory_for_type(type)
             
-            # if set is empty, type is not in inventory
-            if not have_set:
-                missing.append((i[0], db.convert_to_ml(i[1])))
+            # get the amount of the needed type that is already in the inventory
+            have_amount = 0.0
+            
+            for (mfg, lqr) in have_types:
+                # only the highest amount of one type counts as the total amount
+                # this prevents mixing alcohols
+                if db.get_liquor_amount(mfg,lqr) > have_amount:
+                    have_amount = db.get_liquor_amount(mfg,lqr)
+            
+            # find out how much is needed
+            need_amount = have_amount - db.convert_to_ml(amt)
+            
+            if need_amount < 0.0:
+                missing.append((type, need_amount*-1))
         
         return missing
