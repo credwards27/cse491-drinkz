@@ -31,6 +31,9 @@ class LiquorMissing(Exception):
 class RecipeMissing(Exception):
     pass
 
+class DuplicateRecipeName(Exception):
+    pass
+
 def add_bottle_type(mfg, liquor, typ):
     "Add the given bottle type into the drinkz database."
     _bottle_types_db.add((mfg, liquor, typ))
@@ -94,7 +97,13 @@ def convert_to_ml(amt):
 
 def add_recipe(r):
     "Add a recipe to the database"
-    _recipes_db[r.name] = r
+    err = ""
+    try:
+        _recipes_db[r.name]
+        err = "The recipe, %s, is already in the database" % (r.name)
+        raise DuplicateRecipeName(err)
+    except KeyError:
+        _recipes_db[r.name] = r
 
 def get_recipe(name):
     "Retrieve a recipe from the database"

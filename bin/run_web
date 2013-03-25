@@ -1,0 +1,18 @@
+#! /usr/bin/python
+import sys
+import _mypath
+from wsgiref.simple_server import make_server
+
+from drinkz.app import SimpleApp
+
+def main(args):
+    if __name__ == '__main__':
+        import random, socket
+        port = 8181
+        
+        app = SimpleApp()
+        
+        httpd = make_server('', port, app)
+        print "Serving on port %d..." % port
+        print "View at http://%s:%d/" % (socket.getfqdn(), port)
+        httpd.serve_forever()
