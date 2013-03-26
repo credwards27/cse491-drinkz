@@ -1,6 +1,7 @@
 # implementation of recipes
 
 import db
+from .convert import to_ml
 
 class Recipe(object):
     
@@ -25,7 +26,7 @@ class Recipe(object):
                     have_amount = db.get_liquor_amount(mfg,lqr)
             
             # find out how much is needed
-            need_amount = have_amount - db.convert_to_ml(amt)
+            need_amount = have_amount - to_ml(amt)
             
             if need_amount < 0.0:
                 missing.append((type, need_amount*-1))

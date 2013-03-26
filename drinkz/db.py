@@ -6,15 +6,13 @@ Recipes are inherently name/value-paired objects(name, ingredient list), so a di
 store and retrieve them.
 """
 
+from .convert import to_ml
 from .recipes import Recipe
 
 # private singleton variables at module level
 _bottle_types_db = set()
 _inventory_db = {}
 _recipes_db = {}
-
-# invalid characters to be stripped from amount conversions
-_invalid_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&\'()*+,-./:;?@[\\]^_`{|}~ "
 
 def _reset_db():
     "A method only to be used during testing -- toss the existing db info."
@@ -53,9 +51,9 @@ def add_to_inventory(mfg, liquor, amount):
 
     # just add it to the inventory database as a tuple, for now.
     if not check_inventory(mfg, liquor):
-        _inventory_db[(mfg, liquor)] = convert_to_ml(amount)
+        _inventory_db[(mfg, liquor)] = to_ml(amount)
     else:
-        _inventory_db[(mfg, liquor)] += convert_to_ml(amount)
+        _inventory_db[(mfg, liquor)] += to_ml(amount)
 
 def check_inventory(mfg, liquor):
     for (m, l) in _inventory_db.keys():
@@ -70,31 +68,7 @@ def get_liquor_amount(mfg, liquor):
         return _inventory_db[(mfg, liquor)]
     else:
         return 0.0
-
-def convert_to_ml(amt):
-    if "oz" in amt or "ounce" in amt or "ounces" in amt:
-        #amt = amt.strip('oz. ')
-        amt = amt.strip(_invalid_characters)
-        amt = float(amt)
-        amt *= 29.5735
-    elif "gal" in amt or "gals" in amt or "gallon" in amt or "gallons" in amt:
-        #amt = amt.strip('gallons. ')
-        amt = amt.strip(_invalid_characters)
-        amt = float(amt)
-        amt *= 3785.41
-    elif "liter" in amt or "liters" in amt or "L" in amt:
-        amt = amt.strip(_invalid_characters)
-        amt = float(amt)
-        amt *= 1000
-    elif "ml" in amt or "milliliter" in amt or "milliliters" in amt:
-        #amt = amt.strip('ml. ')
-        amt = amt.strip(_invalid_characters)
-        amt = float(amt)
-    else:
-        amt = float(amt)
     
-    return amt
-
 def add_recipe(r):
     "Add a recipe to the database"
     err = ""
