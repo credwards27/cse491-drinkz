@@ -6,23 +6,28 @@ import drinkz.recipes
 from drinkz.convert import to_ml
 
 #
-# DUMMY TEST CODE (WILL BE MOVED LATER)
+# DUMMY TEST DATA, WILL BE REMOVED LATER vvvvv
 #
 
 # add dummy bottle types
-#drinkz.db.add_bottle_type('Johnnie Walker', 'Black Label', 'blended scotch')
-#drinkz.db.add_bottle_type('Evan Williams', 'Cinnamon Reserve', 'kentucky liqueor')
+"""
+drinkz.db.add_bottle_type('Johnnie Walker', 'Black Label', 'blended scotch')
+drinkz.db.add_bottle_type('Evan Williams', 'Cinnamon Reserve', 'kentucky liqueor')
 
 # add dummy inventory items
-#drinkz.db.add_to_inventory('Johnnie Walker', 'Black Label', '1000 ml')
-#drinkz.db.add_to_inventory('Evan Williams', 'Cinnamon Reserve', '2000 ml')
-#drinkz.db.add_to_inventory('Johnnie Walker', 'Black Label', '40oz')
+drinkz.db.add_to_inventory('Johnnie Walker', 'Black Label', '1000 ml')
+drinkz.db.add_to_inventory('Evan Williams', 'Cinnamon Reserve', '2000 ml')
+drinkz.db.add_to_inventory('Johnnie Walker', 'Black Label', '40oz')
 
 # add dummy recipes
-#a = drinkz.recipes.Recipe('scotch on the rocks', [('blended scotch','4 oz')])
-#drinkz.db.add_recipe(a)
-#b = drinkz.recipes.Recipe('black label on the rocks', [('Black Label','6 oz')])
-#drinkz.db.add_recipe(b)
+a = drinkz.recipes.Recipe('scotch on the rocks', [('blended scotch','4 oz')])
+drinkz.db.add_recipe(a)
+b = drinkz.recipes.Recipe('black label on the rocks', [('Black Label','6 oz')])
+drinkz.db.add_recipe(b)
+"""
+#
+# DUMMY TEST DATA, WILL BE REMOVED LATER ^^^^^
+#
 
 class SimpleApp(object):
     def __call__(self, environ, start_response):
@@ -32,44 +37,29 @@ class SimpleApp(object):
         
         # PATH ROUTING
         # index page
-        if path == '/':
+        if path == '/' or path == '/index.html' or path == '/index':
             content_type = 'text/html'
-            headers = [('Content-type', content_type)]
-            start_response(status, headers)
-            return [_build_index()]
-        elif path == '/index.html':
-            content_type = 'text/html'
-            headers = [('Content-type', content_type)]
-            start_response(status, headers)
-            return [_build_index()]
+            data = _build_index()
         
         # recipe list
-        elif path == '/recipes.html':
+        elif path == '/recipes.html' or path == '/recipes':
             content_type = 'text/html'
-            headers = [('Content-type', content_type)]
-            start_response(status, headers)
-            return [_build_recipes()]
+            data = _build_recipes()
         
         # inventory list
-        elif path == '/inventory.html':
+        elif path == '/inventory.html' or path == '/inventory':
             content_type = 'text/html'
-            headers = [('Content-type', content_type)]
-            start_response(status, headers)
-            return [_build_inventory()]
+            data = _build_inventory()
         
         # liquor types list
-        elif path == '/liquor_types.html':
+        elif path == '/liquor_types.html' or path == '/liquor_types':
             content_type = 'text/html'
-            headers = [('Content-type', content_type)]
-            start_response(status, headers)
-            return [_build_liquor_types()]
+            data = _build_liquor_types()
         
         # liquor amount conversion form
-        elif path == '/convert_amount.html':
+        elif path == '/convert_amount.html' or path == '/convert_amount':
             content_type = 'text/html'
-            headers = [('Content-type', content_type)]
-            start_response(status, headers)
-            return [_build_liquor_conversion()]
+            data = _build_liquor_conversion()
         
         # conversion form submission
         elif path =='/recv':
@@ -77,9 +67,17 @@ class SimpleApp(object):
             results = urlparse.parse_qs(formdata)
             
             content_type = 'text/html'
-            headers = [('Content-type', content_type)]
-            start_response(status, headers)
-            return [_build_conversion_results(results['amount'][0])]
+            data = _build_conversion_results(results['amount'][0])
+        
+        # unexpected request
+        else:
+            content_type = 'text/plain'
+            data = 'If "%s" does not appear in our records, it does not exist!' % path
+        
+        # build and return the data
+        headers = [('Content-type', content_type)]
+        start_response(status, headers)
+        return [data]
 
 ########################################
 # template builder functions
@@ -140,23 +138,76 @@ def _build_index():
 
 # build recipes list page
 def _build_recipes():
+    # get all recipes with ingredients status
+    recipes = drinkz.db.get_all_recipes()
+    list = "\n"
+    
+    for r in recipes:
+        list += "<strong><li>" + r.name + ":</strong> "
+        if not r.need_ingredients():
+            list += "<em>Ready to go!</em>"
+        else:
+            list += "<em>Need more ingredients</em>"
+        
+        list += "</li>\n"
+    
     # set page content
     title = "Recipes"
-    content = ""
+    content = \
+"""
+<h1>Recipes</h1>
+
+<p>
+<ul>""" + list + """</ul>
+</p>
+"""
     return _build_page(title, content)
 
 # build inventory list page
 def _build_inventory():
+    # get inventory with amounts
+    list = "\n"
+    items = drinkz.db.get_liquor_inventory()
+    
+    for (m,l) in items:
+        amt = drinkz.db.get_liquor_amount(m,l)
+        list += "<li><strong>" + m + ", " + l + ":</strong> " + str(amt) + " ml</li>\n"
+    
     # set page content
     title = "Inventory"
-    content = ""
+    content = \
+"""
+<h1>Inventory</h1>
+
+<p>
+<ul>""" + list + """</ul>
+</p>
+"""
     return _build_page(title, content)
 
 # build liquor types list page
 def _build_liquor_types():
+    bottles = []
+    
+    # add all bottle types to list
+    for i in drinkz.db._bottle_types_db:
+        bottles.append(i)
+    
+    # get all of the bottle types in a string for html
+    list = "\n"
+    for i in bottles:
+        list += "<li>" + str(i[0]) + ", " + str(i[1]) + ", " + str(i[2]) + "</li>\n"
+    
     # set page content
     title = "Liquor Types"
-    content = ""
+    content = \
+"""
+<h1>Liquor Types</h1>
+
+<p>
+<ul>""" + list + """</ul>
+</p>
+"""
     return _build_page(title, content)
 
 # build liquor amount conversion form page
@@ -170,8 +221,9 @@ def _build_liquor_conversion():
 <form action='recv'>
 Amount: <input type='text' name='amount' size='10'>
 <input type='submit'>
+<br />
+<em>Supported types: ounces, gallons, liters, milliliters</em>
 </form>
-<p><em>Supported types: ounces, gallons, liters, milliliters</em></p>
 """
     return _build_page(title, content)
 

@@ -4,7 +4,11 @@
 _invalid_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&\'()*+,-./:;?@[\\]^_`{|}~ "
 
 def to_ml(amt):
-    if "oz" in amt or "ounce" in amt or "ounces" in amt:
+    if "ml" in amt or "mL" in amt or "milliliter" in amt or "milliliters" in amt:
+        #amt = amt.strip('ml. ')
+        amt = amt.strip(_invalid_characters)
+        amt = float(amt)
+    elif "oz" in amt or "ounce" in amt or "ounces" in amt:
         #amt = amt.strip('oz. ')
         amt = amt.strip(_invalid_characters)
         amt = float(amt)
@@ -14,14 +18,10 @@ def to_ml(amt):
         amt = amt.strip(_invalid_characters)
         amt = float(amt)
         amt *= 3785.41
-    elif "liter" in amt or "liters" in amt or "L" in amt:
+    elif "liter" in amt or "liters" in amt or "L" in amt or "l" in amt:
         amt = amt.strip(_invalid_characters)
         amt = float(amt)
         amt *= 1000
-    elif "ml" in amt or "milliliter" in amt or "milliliters" in amt:
-        #amt = amt.strip('ml. ')
-        amt = amt.strip(_invalid_characters)
-        amt = float(amt)
     else:
         amt = float(amt)
     
