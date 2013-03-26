@@ -8,6 +8,7 @@ store and retrieve them.
 
 from .convert import to_ml
 from .recipes import Recipe
+from cPickle import dump, load
 
 # private singleton variables at module level
 _bottle_types_db = set()
@@ -20,6 +21,23 @@ def _reset_db():
     _bottle_types_db = set()
     _inventory_db = {}
     _recipes_db = {}
+
+def save_db(filename):
+    fp = open(filename, 'wb')
+
+    tosave = (_bottle_types_db, _inventory_db)
+    dump(tosave, fp)
+
+    fp.close()
+
+def load_db(filename):
+    global _bottle_types_db, _inventory_db
+    fp = open(filename, 'rb')
+
+    loaded = load(fp)
+    (_bottle_types_db, _inventory_db) = loaded
+
+    fp.close()
 
 # exceptions in Python inherit from Exception and generally don't need to
 # override any methods.
