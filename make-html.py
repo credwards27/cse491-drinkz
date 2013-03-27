@@ -12,20 +12,7 @@ def init_site():
         # already exists
         pass
     
-    # add dummy bottle types
-    drinkz.db.add_bottle_type('Johnnie Walker', 'Black Label', 'blended scotch')
-    drinkz.db.add_bottle_type('Evan Williams', 'Cinnamon Reserve', 'kentucky liqueor')
-    
-    # add dummy inventory items
-    drinkz.db.add_to_inventory('Johnnie Walker', 'Black Label', '1000 ml')
-    drinkz.db.add_to_inventory('Evan Williams', 'Cinnamon Reserve', '2000 ml')
-    drinkz.db.add_to_inventory('Johnnie Walker', 'Black Label', '40oz')
-    
-    # add dummy recipes
-    a = drinkz.recipes.Recipe('scotch on the rocks', [('blended scotch','4 oz')])
-    drinkz.db.add_recipe(a)
-    b = drinkz.recipes.Recipe('black label on the rocks', [('Black Label','6 oz')])
-    drinkz.db.add_recipe(b)
+    drinkz.db.load_db('bin/database_file')
 
 # header information for every webpage
 def headers(title):

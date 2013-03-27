@@ -1,3 +1,14 @@
+"""
+This script creates a database file with test data. It accepts a single command line argument, which is the filename
+that will be created containing the database information.
+
+For purposes of testing, the 'run-web' script currently accepts a file from the bin directory called "database_file"
+"""
+
+#! /usr/bin/env python
+import sys
+import _mypath
+
 import drinkz.db
 import drinkz.recipes
 from drinkz.convert import to_ml
@@ -18,25 +29,10 @@ drinkz.db.add_recipe(a)
 b = drinkz.recipes.Recipe('black label on the rocks', [('Black Label','6 oz')])
 drinkz.db.add_recipe(b)
 
-# test wsgi functionality
-def test_recipes():
-    simple_app = SimpleApp()
-    simple_app = drinkz.db.load_db('database_file')
-    
-    environ = {'PATH_INFO': '/recipes.html'}
-    d = {}
-    def my_start_response(s, h, return_in=d):
-        d['status'] = s
-        d['headers'] = h
-    
-    text = _init_app(environ, my_start_response)
-    status, headers = d['status'], d['headers']
-    
-    assert text.find('scotch on the rocks') != -1, text
-    assert text.find('black label on the rocks') != -1, text
+def main(args):
+    filename = args[1]
+    drinkz.db.save_db(filename)
+    drinkz.db.load_db(filename)
 
-# run the app for testing
-def _init_app(environ, start_response):
-    app_obj = SimpleApp()
-    results = app_obj(environ, start_response)
-    return "".join(results)
+if __name__ == '__main__':
+   main(sys.argv)

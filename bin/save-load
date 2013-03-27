@@ -2,6 +2,8 @@
 import sys
 import _mypath
 
+import drinkz
+
 from drinkz.db import save_db, load_db
 
 def main(args):
