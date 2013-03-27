@@ -22,9 +22,7 @@ dispatch = {
     '/convert_amount.html' : 'convert_amount',
     '/recv' : 'recv',
     '/error' : 'error',
-    '/convert' : 'convert_units_to_ml',
-    '/recipe_names' : 'get_recipe_names',
-    '/liquor_inventory' : 'get_liquor_inventory'
+    '/rpc' : 'dispatch_rpc'
 }
 
 # html headers for page encoding
@@ -49,49 +47,6 @@ class SimpleApp(object):
             return ["No path %s is found" % path]
         
         return fn(environ, start_response)
-        
-        # PATH ROUTING
-        # index page
-        if path == '/' or path == '/index.html' or path == '/index':
-            content_type = 'text/html'
-            data = page_builder.build_index()
-        
-        # recipe list
-        elif path == '/recipes.html' or path == '/recipes':
-            content_type = 'text/html'
-            data = page_builder.build_recipes()
-        
-        # inventory list
-        elif path == '/inventory.html' or path == '/inventory':
-            content_type = 'text/html'
-            data = page_builder.build_inventory()
-        
-        # liquor types list
-        elif path == '/liquor_types.html' or path == '/liquor_types':
-            content_type = 'text/html'
-            data = page_builder.build_liquor_types()
-        
-        # liquor amount conversion form
-        elif path == '/convert_amount.html' or path == '/convert_amount':
-            content_type = 'text/html'
-            data = page_builder.build_liquor_conversion()
-        
-        # conversion form submission
-        elif path =='/recv':
-            formdata = environ['QUERY_STRING']
-            results = urlparse.parse_qs(formdata)
-            
-            content_type = 'text/html'
-            data = page_builder.build_conversion_results(results['amount'][0])
-        
-        # unexpected request
-        else:
-            content_type = 'text/plain'
-            data = 'If "%s" does not appear in our records, it does not exist!' % path
-        
-        # build and return the data
-        start_response(status, list(html_headers))
-        return [data]
     
     # index page
     def index(self, environ, start_response):
@@ -107,3 +62,96 @@ class SimpleApp(object):
     def inventory(self, environ, start_response):
         start_response('200 OK', list(html_headers))
         return [page_builder.build_inventory()]
+    
+    # liquor types list
+    def liquor_types(self, environ, start_response):
+        start_response('200 OK', list(html_headers))
+        return [page_builder.build_index()]
+    
+    # liquor amount conversion form
+    def convert_amount(self, environ, start_response):
+        start_response('200 OK', list(html_headers))
+        return [page_builder.build_liquor_conversion()]
+    
+    # conversion form submission
+    def recv(self, environ, start_response):
+        formdata = environ['QUERY_STRING']
+        results = urlparse.parse_qs(formdata)
+        content_type = 'text/html'
+        
+        start_response('200 OK', list(html_headers))
+        return [page_builder.build_conversion_results(results['amount'][0])]
+    
+    # unexpected request
+    def error(self, environ, start_response):
+        content_type = 'text/plain'
+        data = 'If "%s" does not appear in our records, it does not exist!' % path
+        
+        start_response(status, list(html_headers))
+        return [data]
+    
+    ########################################
+    # simplejson handlers
+    ########################################
+    
+    def dispatch_rpc(self, environ, start_response):
+        # POST requests deliver input data vi a file-like handle,
+        # with the size of the data specified by CONTENT_LENGTH;
+        # see the WSGI PEP
+        
+        if environ['REQUEST_METHOD'].endswith('POST'):
+            body = None
+            if environ.get('CONTENT_LENGTH'):
+                length = int(environ['CONTENT_LENGTH'])
+                body = environ['wsgi.input'].read(length)
+                response = self._dispatch(body) + '\n'
+                start_response('200 OK', [('Content-Type', 'application/json')])
+                
+                return [response]
+        
+        # default to a non JSON-RPC error
+        status = "404 Not Found"
+        content_type = 'text/html'
+        data = "Couldn't find your stuff."
+        
+        start_response('200 OK', list(html_headers))
+        return [data]
+    
+    def _decode(self, json):
+        return simplejson.loads(json)
+    
+    def _dispatch(self, json):
+        rpc_request = self._decode(json)
+        
+        method = rpc_request['method']
+        params = rpc_request['params']
+        
+        rpc_fn_name = 'rpc_' + method
+        fn = getattr(self, rpc_fn_name)
+        result = fn(*params)
+        
+        response = { 'result' : result, 'error' : None, 'id' : 1 }
+        response = simplejson.dumps(response)
+        return str(response)
+    
+    # rpc unit conversion function
+    def rpc_convert_units_to_ml(self, amount):
+        return to_ml(amount)
+    
+    # rpc call to return a list of all recipe names
+    def rpc_get_recipe_names(self):
+        recipes = drinkz.db.get_all_recipes
+        names = []
+        for r in recipes:
+            names.append(r.name)
+        
+        return names
+    
+    # rpc call to return a list of all items in the inventory
+    def rpc_get_liquor_inventory(self):
+        inventory = drinkz.db.get_liquor_inventory()
+        items = []
+        for (m,l) in inventory:
+            items.append((m,l))
+        
+        return items
