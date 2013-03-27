@@ -35,6 +35,10 @@ class SimpleApp(object):
     def __call__(self, environ, start_response):
         status = '200 OK'
         
+        #print "REQUEST_METHOD:", environ['REQUEST_METHOD']
+        #print "CONTENT_LENGTH:", environ['CONTENT_LENGTH']
+        #print "wsgi.input:", environ['wsgi.input']
+        
         path = environ['PATH_INFO']
         fn_name = dispatch.get(path, 'error')
         

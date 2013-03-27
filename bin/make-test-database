@@ -2,7 +2,8 @@
 This script creates a database file with test data. It accepts a single command line argument, which is the filename
 that will be created containing the database information.
 
-For purposes of testing, the 'run-web' script currently accepts a file from the bin directory called "database_file"
+For purposes of testing, the 'run-web', 'test_app.py', and 'test_jsonrpc.py' scripts currently accepts a file from
+the bin directory called "database_file"
 """
 
 #! /usr/bin/env python

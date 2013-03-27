@@ -6,7 +6,7 @@ from drinkz.app import SimpleApp
 # test wsgi functionality
 def test_recipes():
     simple_app = SimpleApp()
-    simple_app = drinkz.db.load_db('bin/database_file')
+    simple_app.load_database('bin/database_file')
     
     environ = {'PATH_INFO': '/recipes.html'}
     d = {}
