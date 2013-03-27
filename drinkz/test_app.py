@@ -21,7 +21,7 @@ drinkz.db.add_recipe(b)
 # test wsgi functionality
 def test_recipes():
     simple_app = SimpleApp()
-    simple_app = drinkz.db.load_db('database_file')
+    simple_app = drinkz.db.load_db('bin/database_file')
     
     environ = {'PATH_INFO': '/recipes.html'}
     d = {}
