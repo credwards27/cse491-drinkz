@@ -5,8 +5,8 @@ import socket
 
 def main(args):
     # store the command line arguments
-    hostname = args[0]
-    port = args[1]
+    hostname = args[1]
+    port = args[2]
     
     # create the socket object
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -14,6 +14,7 @@ def main(args):
     # get the host ip address
     try:
         ip = socket.gethostbyname(hostname)
+        print ip
     except socket.gaierror:
         print "Could not resolve host"
         return 0
