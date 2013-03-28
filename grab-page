@@ -20,11 +20,11 @@ def main(args):
         return 0
     
     # connect to the host
-    s.connect((ip, port))
+    s.connect((ip, int(port)))
     
     # send a request and store the reply
-    request = 'GET / HTTP1.1'
-    s.send(request)
+    request = 'GET / HTTP1.1\r\n\n'
+    s.sendall(request)
     reply = s.recv(4096)
     
     print reply
