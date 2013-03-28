@@ -13,11 +13,15 @@ app = SimpleApp()
 app.load_database('bin/database_file')
 
 def test_conversion():
+    # encode things in a dict that is then converted into json
+    d = dict(method='convert_units_to_ml', params=['8oz'], id=1)
+    encoded = simplejson.dumps(d)
+    
     environ = {
         'PATH_INFO': '/rpc',
         'REQUEST_METHOD': 'POST',
-        'CONTENT_LENGTH': '',
-        'wsgi.input': StringIO.StringIO()
+        'CONTENT_LENGTH': '1000',
+        'wsgi.input': StringIO.StringIO(encoded)
     }
     
     d = {}
@@ -26,9 +30,13 @@ def test_conversion():
         d['status'] = s
         d['headers'] = h
     
-    amount = '8oz'
+    json_conversion = _run_rpc_convert_units(environ, my_start_response)
     
-    #json_conversion = _run_rpc_convert_units(amount, environ, my_start_response)
+    # decode response
+    json_parsed = simplejson.loads("".join(json_conversion))
+    
+    # compare results
+    assert json_parsed['result'] == to_ml('8oz')
 
 def call_remote(base, method, params, id):
     # determine the url to call
@@ -54,5 +62,7 @@ def call_remote(base, method, params, id):
     # return result
     return response['result']
 
-def _run_rpc_convert_units(amt, environ, start_response):
+def _run_rpc_convert_units(environ, start_response):
     json_conversion = app(environ, start_response)
+    print json_conversion
+    return json_conversion

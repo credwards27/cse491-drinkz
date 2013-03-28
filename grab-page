@@ -23,10 +23,12 @@ def main(args):
     s.connect((ip, int(port)))
     
     # send a request and store the reply
-    request = 'GET / HTTP1.1\r\n\n'
+    request = 'GET / HTTP/1.0\r\n\r\n'
     s.sendall(request)
     reply = s.recv(4096)
+    print reply
     
+    reply = s.recv(4096)
     print reply
 
 if __name__ == '__main__':
