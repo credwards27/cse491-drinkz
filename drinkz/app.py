@@ -144,7 +144,7 @@ class SimpleApp(object):
     
     # rpc call to return a list of all recipe names
     def rpc_get_recipe_names(self):
-        recipes = drinkz.db.get_all_recipes
+        recipes = drinkz.db.get_all_recipes()
         names = []
         for r in recipes:
             names.append(r.name)
