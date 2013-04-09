@@ -5,10 +5,12 @@ from .convert import to_ml
 
 class Recipe(object):
     
+    # the recipe constructor takes a string name and a list of ingredients
     def __init__(self, name, ingredients):
         self.name = name
         self.ingredients = ingredients
-        
+    
+    # returns a list of ingredients of which the database does not have enough quantity for the recipe
     def need_ingredients(self):
         missing = []
         
