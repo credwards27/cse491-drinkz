@@ -47,6 +47,12 @@ def build_recipes():
     template = env.get_template('recipes.html')
     return template.render(vars)
 
+# build add recipe form page
+def build_add_recipe():
+     # render the correct template
+    template = env.get_template('add_recipe.html')
+    return template.render()
+
 # build inventory list page
 def build_inventory():
     # template expects a list of tuples in the form (manufacturer, liquor type, amount)

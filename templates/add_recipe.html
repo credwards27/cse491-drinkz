@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Add Recipe{% endblock %}
+
+{% block pageTitle %}Add Recipe{% endblock %}
+
+{% block content %}
+
+<p><em>All fields required</em></p>
+
+<form action="recv_add_recipe">
+	<strong>Recipe Name:</strong> <input type="text" name="name" size="20" />
+	<br />
+	<br />
+	<strong>Ingredient:</strong> <input type="text" name="in0" size="20" />
+	<br />
+	<strong>Amount:</strong> <input type="text" name="amt0" size="10" />
+	<br />
+	<br />
+	<strong>Ingredient:</strong> <input type="text" name="in1" size="20" />
+	<br />
+	<strong>Amount:</strong> <input type="text" name="amt1" size="10" />
+	<br />
+	<br />
+	<strong>Ingredient:</strong> <input type="text" name="in2" size="20" />
+	<br />
+	<strong>Amount:</strong> <input type="text" name="amt2" size="10" />
+	<br />
+	<br />
+	<strong>Ingredient:</strong> <input type="text" name="in3" size="20" />
+	<br />
+	<strong>Amount:</strong> <input type="text" name="amt3" size="10" />
+	<br />
+	<br />
+	<strong>Ingredient:</strong> <input type="text" name="in4" size="20" />
+	<br />
+	<strong>Amount:</strong> <input type="text" name="amt4" size="10" />
+	<br />
+	<br />
+	<input type="submit">
+</form>
+
+{% endblock %}

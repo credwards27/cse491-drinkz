@@ -5,7 +5,7 @@ from .convert import to_ml
 
 class Recipe(object):
     
-    # the recipe constructor takes a string name and a list of ingredients
+    # the recipe constructor takes a string name and a list of (ingredient, amount) tuples
     # ingredients is a list of liquor type/amount tuples
     def __init__(self, name, ingredients):
         self.name = name
@@ -15,7 +15,12 @@ class Recipe(object):
     def need_ingredients(self):
         missing = []
         
+        print self.name
+        print self.ingredients
+        
         for (type, amt) in self.ingredients:
+            print type
+            print amt
             # get a list of what types are in inventory
             have_types = db.check_inventory_for_type(type)
             

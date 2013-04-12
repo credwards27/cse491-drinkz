@@ -14,6 +14,9 @@ dispatch = {
     '/index.html' : 'index',
     '/recipes' : 'recipes',
     '/recipes.html' : 'recipes',
+    '/add_recipe' : 'add_recipe',
+    '/add_recipe.html' : 'add_recipe',
+    '/recv_add_recipe' : 'recv_add_recipe',
     '/inventory' : 'inventory',
     '/inventory.html' : 'inventory',
     '/add_inventory_item' : 'add_inventory_item',
@@ -71,6 +74,40 @@ class SimpleApp(object):
     
     # recipe list
     def recipes(self, environ, start_response):
+        start_response('200 OK', list(html_headers))
+        return page_builder.build_recipes()
+    
+    # add recipe form
+    def add_recipe(self, environ, start_response):
+        start_response('200 OK', list(html_headers))
+        return page_builder.build_add_recipe()
+    
+    # add recipe form handler
+    def recv_add_recipe(self, environ, start_response):
+        formdata = environ['QUERY_STRING']
+        results = urlparse.parse_qs(formdata)
+        
+        ingredients = []
+        
+        # add ingredients to the list
+        for i in range(0,5):
+            try:
+                ingValue = "".join(results['in'+str(i)])
+                amtValue = "".join(results['amt'+str(i)])
+                ing = (ingValue, amtValue)
+                ingredients.append(ing)
+            except KeyError:
+                continue
+        
+        # create the new recipe
+        r = drinkz.recipes.Recipe("".join(results['name']), ingredients)
+        
+        try:
+            drinkz.db.add_recipe(r)
+        except drinkz.db.DuplicateRecipeName:
+            pass
+        
+        # return to the recipe list page
         start_response('200 OK', list(html_headers))
         return page_builder.build_recipes()
     
