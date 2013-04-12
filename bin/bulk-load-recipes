@@ -50,7 +50,12 @@ def main(args):
         
         # create a new recipe object and add it to the database
         recipe = Recipe(name, ingredients)
-        db.add_recipe(recipe)
+        
+        # catch duplicate recipe errors
+        try:
+            db.add_recipe(recipe)
+        except db.DuplicateRecipeName:
+            print "'" + recipe.name + "' already in database"
     
     # save the database to include the new recipes
     db.save_db(database)

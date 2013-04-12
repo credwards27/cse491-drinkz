@@ -1,0 +1,78 @@
+#! /usr/bin/env python
+
+"""
+USE WITH CAUTION - THIS OPERATION CANNOT BE UNDONE
+
+reset-db [database file] [command]
+
+This script resets one of the databases in db. The database file is a prexisting saved database file to be loaded and
+changed. The command indicates which database sould be reset.
+
+Valid commands:
+
+recipes
+inventory
+types
+"""
+
+import sys
+import _mypath
+
+from drinkz import db
+
+def main(args):
+    valid = ['recipes', 'inventory', 'types']
+    
+    if len(args) != 3:
+        print "Incorrect number of arguments"
+        print "\nreset-db [database file] [command]"
+        print "\nValid commands:"
+        for v in valid:
+            print v
+        return
+    
+    database = args[1]
+    cmd = args[2]
+    
+    # load database
+    try:
+        db.load_db(database)
+    except IOError:
+        print "'" + database + "' was not found"
+        return
+    
+    if cmd not in valid:
+        print "'" + cmd + "' is not a valid command, please use:"
+        for v in valid:
+            print v
+        return
+    
+    print "THIS OPERATION CANNOT BE UNDONE"
+    confirm = raw_input("Are you sure you wish to continue? (y/n) ")
+    
+    if confirm.lower() == 'y':
+        # reset the appropriate database
+        if cmd == 'recipes':
+            db._recipes_db = {}
+        elif cmd == 'inventory':
+            db._inventory_db = {}
+        elif cmd == 'types':
+            db._bottle_types_db = set()
+        else:
+            print cmd + " is not a valid command"
+            print "Please use 'recipes', 'inventory', or 'types'"
+            print "Aborted"
+            return
+        
+        # write the changes to the database file
+        db.save_db(database)
+        
+        print "Reset " + cmd + " database"
+    
+    elif confirm.lower() == 'n':
+        print "Aborted"
+    else:
+        print "Illegal response, aborted"
+
+if __name__ == '__main__':
+    main(sys.argv)
