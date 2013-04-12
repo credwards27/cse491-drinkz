@@ -35,6 +35,7 @@ def save_db(filename):
 # loads a database file into the database
 def load_db(filename):
     global _bottle_types_db, _inventory_db, _recipes_db
+    print "loading database"
     fp = open(filename, 'rb')
 
     loaded = load(fp)
@@ -83,16 +84,6 @@ def check_inventory(mfg, liquor):
         
     return False
 
-# gets a list of all recipes that can be made from the items in the inventory
-def get_possible_recipes():
-    possible = []
-    
-    for r in _recipes_db:
-        if not r.need_ingredients():
-            possible.append(r)
-    
-    return possible
-
 def get_liquor_amount(mfg, liquor):
     "Retrieve the total amount of any given liquor currently in inventory."
     if (mfg, liquor) in _inventory_db.keys():
@@ -129,6 +120,16 @@ def get_all_recipes():
         recipes.append(_recipes_db[r])
     
     return recipes
+
+# gets a list of all recipes that can be made from the items in the inventory
+def get_possible_recipes():
+    possible = []
+    
+    for r in _recipes_db:
+        if not _recipes_db[r].need_ingredients():
+            possible.append(r)
+    
+    return possible
 
 def check_inventory_for_type(type):
     have = set()

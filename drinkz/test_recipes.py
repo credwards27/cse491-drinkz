@@ -2,6 +2,7 @@
 Tests basic recipe API.
 """
 
+import sys
 import unittest
 from . import db, recipes
 
