@@ -111,6 +111,87 @@ def test_liquor_inventory():
     # compare results
     assert json_parsed['result'] == items
 
+# test rpc add liquor
+def test_add_liquor():
+    # encode things in a dict that is then converted into json
+    d = dict(method='add_liquor_type', params=[], id=1)
+    encoded = simplejson.dumps(d)
+    
+    environ = {
+        'PATH_INFO': '/rpc',
+        'REQUEST_METHOD': 'POST',
+        'CONTENT_LENGTH': '1000',
+        'wsgi.input': StringIO.StringIO(encoded)
+    }
+    
+    d = {}
+    
+    def my_start_response(s, h, return_in=d):
+        d['status'] = s
+        d['headers'] = h
+    
+    json_conversion = _run_rpc_call(environ, my_start_response)
+    
+    # decode response
+    json_parsed = simplejson.loads("".join(json_conversion))
+    
+    # compare results
+    assert True
+
+# test rpc add inventory item
+def test_rpc_add_inventory_item():
+    # encode things in a dict that is then converted into json
+    d = dict(method='add_inventory_item', params=[], id=1)
+    encoded = simplejson.dumps(d)
+    
+    environ = {
+        'PATH_INFO': '/rpc',
+        'REQUEST_METHOD': 'POST',
+        'CONTENT_LENGTH': '1000',
+        'wsgi.input': StringIO.StringIO(encoded)
+    }
+    
+    d = {}
+    
+    def my_start_response(s, h, return_in=d):
+        d['status'] = s
+        d['headers'] = h
+    
+    json_conversion = _run_rpc_call(environ, my_start_response)
+    
+    # decode response
+    json_parsed = simplejson.loads("".join(json_conversion))
+    
+    # compare results
+    assert True
+
+# test rpc add recipe
+def test_rpc_add_recipe():
+    # encode things in a dict that is then converted into json
+    d = dict(method='add_recipe', params=[], id=1)
+    encoded = simplejson.dumps(d)
+    
+    environ = {
+        'PATH_INFO': '/rpc',
+        'REQUEST_METHOD': 'POST',
+        'CONTENT_LENGTH': '1000',
+        'wsgi.input': StringIO.StringIO(encoded)
+    }
+    
+    d = {}
+    
+    def my_start_response(s, h, return_in=d):
+        d['status'] = s
+        d['headers'] = h
+    
+    json_conversion = _run_rpc_call(environ, my_start_response)
+    
+    # decode response
+    json_parsed = simplejson.loads("".join(json_conversion))
+    
+    # compare results
+    assert True
+
 def call_remote(base, method, params, id):
     # determine the url to call
     url = base + 'rpc'

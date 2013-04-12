@@ -41,7 +41,10 @@ path = None
 
 class SimpleApp(object):
     def __init__(self):
-        page_builder.init_page_builder()
+        page_builder.init_page_builder('../templates')
+    
+    def fake_init_page_builder(self, templatePath):
+        page_builder.init_page_builder(templatePath)
     
     def load_database(self, filename):
         drinkz.db.load_db(filename)
@@ -242,3 +245,18 @@ class SimpleApp(object):
             items.append((m,l))
         
         return items
+    
+    # rpc call to add a liquor type to the database
+    def rpc_add_liquor_type(self):
+        print "add liquor"
+        pass
+    
+    # rpc call to add an inventory item to the database
+    def rpc_add_inventory_item(self):
+        print "add inventory item"
+        pass
+    
+    # rpc call to add a recipe to the database
+    def rpc_add_recipe(self):
+        print "add recipe"
+        pass

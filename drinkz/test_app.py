@@ -23,5 +23,6 @@ def test_recipes():
 # run the app for testing
 def _init_app(environ, start_response):
     app_obj = SimpleApp()
+    app_obj.fake_init_page_builder('templates')
     results = app_obj(environ, start_response)
     return "".join(results)

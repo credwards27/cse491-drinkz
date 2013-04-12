@@ -10,9 +10,9 @@ loader = None
 env = None
 
 # initializer function
-def init_page_builder():
+def init_page_builder(templatePath):
     global loader, env
-    loader = jinja2.FileSystemLoader('../templates')
+    loader = jinja2.FileSystemLoader(templatePath)
     env = jinja2.Environment(loader=loader)
 
 ########################################
