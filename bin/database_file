@@ -1,0 +1,98 @@
+(c__builtin__
+set
+p1
+((lp2
+(S'Johnnie Walker'
+p3
+S'Black Label'
+p4
+S'blended scotch'
+p5
+tp6
+a(S'Evan Williams'
+p7
+S'Cinnamon Reserve'
+p8
+S'kentucky liqueor'
+tp9
+atRp10
+(dp11
+(g3
+g4
+tp12
+F2182.9400000000001
+s(g7
+g8
+tp13
+F2000
+s(dp14
+S'scotch on the rocks'
+p15
+ccopy_reg
+_reconstructor
+p16
+(cdrinkz.recipes
+Recipe
+p17
+c__builtin__
+object
+p18
+NtRp19
+(dp20
+S'name'
+p21
+g15
+sS'ingredients'
+p22
+(lp23
+(g5
+S'4 oz'
+tp24
+asbsVblack label on the rocks 2
+p25
+g16
+(g17
+g18
+NtRp26
+(dp27
+g21
+g25
+sg22
+(lp28
+(VBlack Label
+p29
+V6 oz
+p30
+tp31
+asbsVscotch on the rocks 2
+p32
+g16
+(g17
+g18
+NtRp33
+(dp34
+g21
+g32
+sg22
+(lp35
+(Vblended scotch
+p36
+V4 oz
+p37
+tp38
+asbsS'black label on the rocks'
+p39
+g16
+(g17
+g18
+NtRp40
+(dp41
+g21
+g39
+sg22
+(lp42
+(g4
+S'6 oz'
+tp43
+asbstp44
+.

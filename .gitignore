@@ -6,8 +6,6 @@
 load-liquor-typesc
 load-liquor-inventoryc
 
-bin/database_file
-
 # project files
 .project
 .pydevproject
