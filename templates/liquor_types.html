@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Liquor Types{% endblock %}
+
+{% block pageTitle %}Liquor Types{% endblock %}
+
+{% block content %}
+
+<p>
+	<ul>
+		{% for (mfg, liq, typ) in bottles %}
+			<li>{{ mfg|e }}, {{ liq|e }}, {{ typ|e }}</li>
+		{% endfor %}
+	</ul>
+</p>
+
+{% endblock %}

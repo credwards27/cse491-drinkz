@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory{% endblock %}
+
+{% block pageTitle %}Inventory{% endblock %}
+
+{% block content %}
+
+<p>
+	<ul>
+		{% for (mfg, typ, amt) in inventory %}
+			<li><strong>{{ mfg|e }}, {{ typ|e }}:</strong> {{ amt|e }} ml</li>
+		{% endfor %}
+	</ul>
+</p>
+
+{% endblock %}

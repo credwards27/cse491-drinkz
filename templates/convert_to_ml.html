@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Convert to Milliliters{% endblock %}
+
+{% block pageTitle %}Convert to Milliliters{% endblock %}
+
+{% block content %}
+
+<form action='recv'>
+	Amount: <input type='text' name='amount' size='10'>
+	<input type='submit'>
+	<br />
+	<em>Supported types: ounces, gallons, liters, milliliters</em>
+</form>
+
+{% endblock %}

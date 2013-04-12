@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% block headers %}
+    <title>{% block title %}Welcome to Drinkz!{% endblock %}</title>
+    {% endblock %}
+    
+    <style type='text/css'>
+    h1 { color: #f00; }
+    body
+    {
+        font-size: 14px;
+    }
+    </style>
+    
+</head>
+<body>
+
+<h1>{% block pageTitle %}Welcome to Drinkz!{% endblock %}</h1>
+
+{% block content %}
+{% endblock %}
+
+<!-- page footer -->
+<hr />
+<h3>Navigation</h3>
+<p>
+<a href="index.html">Home</a>
+<br />
+<a href="recipes.html">Recipes</a>
+<br />
+<a href="inventory.html">Inventory</a>
+<br />
+<a href="liquor_types.html">Liquor Types</a>
+</p>
+
+</body>
+</html>

@@ -5,62 +5,19 @@ import drinkz.db
 import drinkz.recipes
 from drinkz.convert import to_ml
 
+# jinja2 global variables
+loader = None
+env = None
+
 # initializer function
 def init_page_builder():
-    print "initializing page builder"
+    global loader, env
+    loader = jinja2.FileSystemLoader('../templates')
+    env = jinja2.Environment(loader=loader)
 
 ########################################
 # template builder functions
 ########################################
-
-# header information for every webpage
-def _headers(title, content_title, headers=""):
-    header = \
-"""<!DOCTYPE html>
-<html>
-<head>
-    <title>""" + title + """</title>
-    
-    <style type='text/css'>
-    h1 { color: #f00; }
-    body
-    {
-        font-size: 14px;
-    }
-    </style>
-    """ + headers + """
-</head>
-<body>
-
-<h1>""" + content_title + """</h1>
-"""
-    
-    return header
-
-# footer information for every webpage
-def _footers():
-    footer = """\n\n<!-- page footer -->
-<hr />
-<h3>Navigation</h3>
-<p>
-<a href="index.html">Home</a>
-<br />
-<a href="recipes.html">Recipes</a>
-<br />
-<a href="inventory.html">Inventory</a>
-<br />
-<a href="liquor_types.html">Liquor Types</a>
-</p>
-
-</body>
-</html>"""
-    
-    return footer
-
-# page builder function that links all page contents together
-def _build_page(title="Welcome to Drinkz!", content_title="", content="", headers=""):
-    page = _headers(title, content_title, headers) + content + _footers()
-    return page
 
 ########################################
 # content builder functions
@@ -68,130 +25,84 @@ def _build_page(title="Welcome to Drinkz!", content_title="", content="", header
 
 # build index page
 def build_index():
-    # set page content
-    title = "Welcome to Drinkz!"
-    content_title = "Welcome to Drinkz!"
-    headers = \
-    """
-    <script>
-    function alertBox()
-    {
-        alert("Hello! I am an alert box!");
-    }
-    </script>
-    """
-    content = \
-"""
-<a href="convert_amount.html">Convert an amount to milliliters</a>
-<br />
-<br />
-<input type="button" onClick="alertBox()" value="Show alert box" />
-"""
-    
-    return _build_page(title, content_title, content, headers)
+    # render the correct template
+    template = env.get_template('index.html')
+    return template.render()
 
-# build recipes list page
+#build recipes list page
 def build_recipes():
     # get all recipes with ingredients status
+    list = []
     recipes = drinkz.db.get_all_recipes()
-    list = "\n"
     
+    # template expects list of tuples in the form (recipe name, ingredients status)
     for r in recipes:
-        list += "<strong><li>" + r.name + ":</strong> "
         if not r.need_ingredients():
-            list += "<em>Ready to go!</em>"
+            status = "Ready to go!"
         else:
-            list += "<em>Needs more ingredients</em>"
+            status = "Needs more ingredients"
         
-        list += "</li>\n"
+        list.append((r.name, status))
     
-    # set page content
-    title = "Recipes"
-    content_title = "Recipes"
-    content = \
-"""
-<p>
-<ul>""" + list + """</ul>
-</p>
-"""
-    return _build_page(title, content_title, content)
+    # set the variables dictionary
+    vars = dict(recipes=list)
+    
+    # render the correct template
+    template = env.get_template('recipes.html')
+    return template.render(vars)
 
 # build inventory list page
 def build_inventory():
-    # get inventory with amounts
-    list = "\n"
+    # template expects a list of tuples in the form (manufacturer, liquor type, amount)
+    list = []
     items = drinkz.db.get_liquor_inventory()
     
     for (m,l) in items:
         amt = drinkz.db.get_liquor_amount(m,l)
-        list += "<li><strong>" + m + ", " + l + ":</strong> " + str(amt) + " ml</li>\n"
+        list.append((m,l,str(amt)))
     
-    # set page content
-    title = "Inventory"
-    content_title = "Inventory"
-    content = \
-"""
-<p>
-<ul>""" + list + """</ul>
-</p>
-"""
-    return _build_page(title, content_title, content)
+    # set variables dictionary
+    vars = dict(inventory=list)
+    
+    # render the correct template
+    template = env.get_template('inventory.html')
+    return template.render(vars)
 
 # build liquor types list page
 def build_liquor_types():
+    list = []
     bottles = []
     
     # add all bottle types to list
     for i in drinkz.db._bottle_types_db:
         bottles.append(i)
     
-    # get all of the bottle types in a string for html
-    list = "\n"
-    for i in bottles:
-        list += "<li>" + str(i[0]) + ", " + str(i[1]) + ", " + str(i[2]) + "</li>\n"
+    # get all of the bottle types in a string format for html
+    # template expects list of tuples in the form (manufacturer, liquor, type)
+    for (mfg,liq,typ) in bottles:
+        list.append((mfg,liq,typ))
     
-    # set page content
-    title = "Liquor Types"
-    content_title = "Liquor Types"
-    content = \
-"""
-<p>
-<ul>""" + list + """</ul>
-</p>
-"""
-    return _build_page(title, content_title, content)
+    # set variables dictionary
+    vars = dict(bottles=list)
+    
+    # render the correct template
+    template = env.get_template('liquor_types.html')
+    return template.render(vars)
 
 # build liquor amount conversion form page
 def build_liquor_conversion():
-    # set page content
-    title = "Convert to Milliliters"
-    content_title = "Convert to Milliliters"
-    content = \
-"""
-<form action='recv'>
-Amount: <input type='text' name='amount' size='10'>
-<input type='submit'>
-<br />
-<em>Supported types: ounces, gallons, liters, milliliters</em>
-</form>
-"""
-    return _build_page(title, content_title, content)
+    # render the correct template
+    template = env.get_template('convert_to_ml.html')
+    return template.render()
 
 # build liquor amount conversion results page
 def build_conversion_results(in_amt):
     # run calculation
     out_amt = to_ml(in_amt)
     
-    #set page content
-    title = "Conversion Results"
-    content_title = "Results"
-    content = \
-"""
-<p>
-<strong>You entered:</strong> %s
-<br />
-<br />
-<strong>Amount in milliliters:</strong> %f ml
-</p>
-""" % (in_amt, out_amt)
-    return _build_page(title, content_title, content)
+    # set variables dictionary
+    vars = dict(inAmt=in_amt, outAmt=out_amt)
+    
+    # render the correct template
+    template = env.get_template('conversion_results.html')
+    return template.render(vars)

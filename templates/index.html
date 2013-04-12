@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Drinkz!{% endblock %}
+
+{% block headers %}
+	{{ super() }}
+	<script>
+		function alertBox()
+		{
+		    alert("Hello! I am an alert box!");
+		}
+	</script>
+{% endblock %}
+
+{% block pageTitle %}Welcome to Drinkz!{% endblock %}
+
+{% block content %}
+
+<a href="convert_amount.html">Convert an amount to milliliters</a>
+<br />
+<br />
+<input type="button" onClick="alertBox()" value="Show alert box" />
+
+{% endblock %}

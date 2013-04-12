@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Recipes{% endblock %}
+
+{% block pageTitle %}Recipes{% endblock %}
+
+{% block content %}
+
+<p>
+	<ul>
+		{% for (name, status) in recipes %}
+			<li><strong>{{ name|e }}:</strong> <em>{{ status|e }}</em></li>
+		{% endfor %}
+	</ul>
+</p>
+
+{% endblock %}

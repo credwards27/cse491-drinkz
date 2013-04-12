@@ -29,6 +29,9 @@ dispatch = {
 html_headers = [('Content-Type', 'text/html; charset=UTF-8')]
 
 class SimpleApp(object):
+    def __init__(self):
+        page_builder.init_page_builder()
+    
     def load_database(self, filename):
         drinkz.db.load_db(filename)
     
