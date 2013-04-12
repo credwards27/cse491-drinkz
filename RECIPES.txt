@@ -1,0 +1,11 @@
+Bulk Loading Recipes
+
+Recipes can be bulk loaded with XML files. Recipes in the file are structured in the following format:
+
+<recipe name="RECIPE NAME">
+	<ingredient name="LIQUOR TYPE" amount="AMOUNT WITH UNIT" />
+</recipe>
+
+The bulk-load-recipes script expects 2 arguments. The first is the name of a database file generated from db.load_db(filename). The second is an XML file containing recipe definitions. The script will load the database file, add the recipes from the XML file to the database, then save the changes back to the database file.
+
+There is also a script in bin/ called reset-db. It expects 2 arguments, the first being a database file, and second being the particular database to reset. This script will reset the specified database to empty (useful for avoiding duplicate errors when adding inventories or recipes). Run reset-db with no arguments for more details on its usage.
