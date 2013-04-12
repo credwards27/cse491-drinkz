@@ -1,6 +1,13 @@
+import sys
+import jinja2
+
 import drinkz.db
 import drinkz.recipes
 from drinkz.convert import to_ml
+
+# initializer function
+def init_page_builder():
+    print "initializing page builder"
 
 ########################################
 # template builder functions

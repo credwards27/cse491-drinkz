@@ -1,0 +1,7 @@
+Party Planning
+
+This system will include features for organizing and planning a party. It will contain a date, time, and location, as well as a liquor list of all the alcohol guests are bringing. There will be a host and guests, and people can choose what liquor from their inventory they will bring to the party. The host can request a certain type or types of liquors for guests to bring. After the party, guests can rate it to give points to the venue.
+
+An event will be a data structure in and of itself. Venues will also be an independent data structure, as they will have points associated with them based on how guests rate their past parties. These objects will be stored in databases (events and venues).
+
+Users will also be necessary for this feature, as they can host and be invited to events. For purposes of this feature, users will have a name, liquor cabinet (assumed), an events database, and a venues database.

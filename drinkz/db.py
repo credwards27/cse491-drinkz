@@ -35,7 +35,6 @@ def save_db(filename):
 # loads a database file into the database
 def load_db(filename):
     global _bottle_types_db, _inventory_db, _recipes_db
-    print "loading database"
     fp = open(filename, 'rb')
 
     loaded = load(fp)
