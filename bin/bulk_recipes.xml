@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<recipes>
+	<recipe name="scotch on the rocks 2">
+		<ingredient name="blended scotch" amount="4 oz" />
+	</recipe>
+	<recipe name="black label on the rocks 2">
+		<ingredient name="Black Label" amount="6 oz" />
+	</recipe>
+</recipes>

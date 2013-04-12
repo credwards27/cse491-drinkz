@@ -94,7 +94,7 @@ def build_recipes():
         if not r.need_ingredients():
             list += "<em>Ready to go!</em>"
         else:
-            list += "<em>Need more ingredients</em>"
+            list += "<em>Needs more ingredients</em>"
         
         list += "</li>\n"
     

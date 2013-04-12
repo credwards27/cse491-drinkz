@@ -26,7 +26,7 @@ dispatch = {
 }
 
 # html headers for page encoding
-html_headers = [('Content-Type', 'text/html')]
+html_headers = [('Content-Type', 'text/html; charset=UTF-8')]
 
 class SimpleApp(object):
     def load_database(self, filename):
@@ -50,32 +50,32 @@ class SimpleApp(object):
             start_response("404 Not Found", html_headers)
             return ["No path %s is found" % path]
         
-        return fn(environ, start_response)
+        return [fn(environ, start_response).encode('utf-8')]
     
     # index page
     def index(self, environ, start_response):
         start_response('200 OK', list(html_headers))
-        return [page_builder.build_index()]
+        return page_builder.build_index()
     
     # recipe list
     def recipes(self, environ, start_response):
         start_response('200 OK', list(html_headers))
-        return [page_builder.build_recipes()]
+        return page_builder.build_recipes()
     
     # inventory list
     def inventory(self, environ, start_response):
         start_response('200 OK', list(html_headers))
-        return [page_builder.build_inventory()]
+        return page_builder.build_inventory()
     
     # liquor types list
     def liquor_types(self, environ, start_response):
         start_response('200 OK', list(html_headers))
-        return [page_builder.build_index()]
+        return page_builder.build_liquor_types()
     
     # liquor amount conversion form
     def convert_amount(self, environ, start_response):
         start_response('200 OK', list(html_headers))
-        return [page_builder.build_liquor_conversion()]
+        return page_builder.build_liquor_conversion()
     
     # conversion form submission
     def recv(self, environ, start_response):
@@ -84,7 +84,7 @@ class SimpleApp(object):
         content_type = 'text/html'
         
         start_response('200 OK', list(html_headers))
-        return [page_builder.build_conversion_results(results['amount'][0])]
+        return page_builder.build_conversion_results(results['amount'][0])
     
     # unexpected request
     def error(self, environ, start_response):
@@ -92,7 +92,7 @@ class SimpleApp(object):
         data = 'If "%s" does not appear in our records, it does not exist!' % path
         
         start_response(status, list(html_headers))
-        return [data]
+        return data
     
     ########################################
     # simplejson handlers
@@ -111,7 +111,7 @@ class SimpleApp(object):
                 response = self._dispatch(body) + '\n'
                 start_response('200 OK', [('Content-Type', 'application/json')])
                 
-                return [response]
+                return response
         
         # default to a non JSON-RPC error
         status = "404 Not Found"
@@ -119,7 +119,7 @@ class SimpleApp(object):
         data = "Couldn't find your stuff."
         
         start_response('200 OK', list(html_headers))
-        return [data]
+        return data
     
     def _decode(self, json):
         return simplejson.loads(json)

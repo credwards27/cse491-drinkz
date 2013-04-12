@@ -6,6 +6,7 @@ from .convert import to_ml
 class Recipe(object):
     
     # the recipe constructor takes a string name and a list of ingredients
+    # ingredients is a list of liquor type/amount tuples
     def __init__(self, name, ingredients):
         self.name = name
         self.ingredients = ingredients

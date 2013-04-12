@@ -15,6 +15,7 @@ _bottle_types_db = set()
 _inventory_db = {}
 _recipes_db = {}
 
+# removes all information from the database
 def _reset_db():
     "A method only to be used during testing -- toss the existing db info."
     global _bottle_types_db, _inventory_db, _recipes_db
@@ -22,6 +23,7 @@ def _reset_db():
     _inventory_db = {}
     _recipes_db = {}
 
+# saves the contents of the database to a file
 def save_db(filename):
     fp = open(filename, 'wb')
 
@@ -30,6 +32,7 @@ def save_db(filename):
 
     fp.close()
 
+# loads a database file into the database
 def load_db(filename):
     global _bottle_types_db, _inventory_db, _recipes_db
     fp = open(filename, 'rb')
@@ -79,6 +82,16 @@ def check_inventory(mfg, liquor):
             return True
         
     return False
+
+# gets a list of all recipes that can be made from the items in the inventory
+def get_possible_recipes():
+    possible = []
+    
+    for r in _recipes_db:
+        if not r.need_ingredients():
+            possible.append(r)
+    
+    return possible
 
 def get_liquor_amount(mfg, liquor):
     "Retrieve the total amount of any given liquor currently in inventory."

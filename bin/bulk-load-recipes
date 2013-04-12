@@ -1,0 +1,59 @@
+#! /usr/bin/env python
+
+"""
+This script bulk loads recipes from an XML file. It takes 2 arguments and is run as follows:
+
+bulk-load-recipes [database file] [recipes xml file]
+
+The database file is a prexisting saved database file that the recipes will be added to. It will be loaded into the
+database before the recipes are parsed and added. After the database is loaded and the recipes have been added, the
+database file will be overwritten to save the new recipes.
+"""
+
+import sys
+import _mypath
+from xml.dom import minidom
+
+from drinkz import db
+from drinkz.recipes import Recipe
+
+# get all children of a node that have the specified title
+def _getChildrenByTitle(node, title):
+    for child in node.childNodes:
+        if child.localName == title:
+            yield child
+
+def main(args):
+    # collect the arguments
+    database = args[1]
+    file = args[2]
+    
+    # load the database
+    db.load_db(database)
+    
+    # parse the xml file and get all of the recipe nodes
+    xml = minidom.parse(file)
+    recipes = xml.getElementsByTagName('recipe')
+    
+    # iterate through each recipe node in the list
+    for xr in recipes:
+        name = xr.attributes['name'].value
+        ingredients = []
+        
+        # get all of the ingredient nodes
+        ingList = _getChildrenByTitle(xr, 'ingredient')
+        
+        # add each ingredient to the ingredients list for this recipe
+        for ing in ingList:
+            ingredients.append((ing.attributes['name'].value, \
+                                ing.attributes['amount'].value))
+        
+        # create a new recipe object and add it to the database
+        recipe = Recipe(name, ingredients)
+        db.add_recipe(recipe)
+    
+    # save the database to include the new recipes
+    db.save_db(database)
+
+if __name__ == '__main__':
+    main(sys.argv)
