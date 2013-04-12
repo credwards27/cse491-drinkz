@@ -1,4 +1,8 @@
 #! /usr/bin/env python
+
+# this test assumes make-test-database and bulk-load-recipes have been run with the stock files
+# (database_file and bulk_recipes.xml)
+
 import sys
 import simplejson
 import urllib2
@@ -16,9 +20,6 @@ def test_init():
 
 # test makeable recipes
 def test_get_possible_recipes():
-    # this test assumes make-test-database and bulk-load-recipes have been run with the stock files
-    # (database_file and bulk_recipes.xml)
-    
     recipes = drinkz.db.get_possible_recipes()
     possible = []
     

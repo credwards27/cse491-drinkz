@@ -15,12 +15,7 @@ class Recipe(object):
     def need_ingredients(self):
         missing = []
         
-        print self.name
-        print self.ingredients
-        
         for (type, amt) in self.ingredients:
-            print type
-            print amt
             # get a list of what types are in inventory
             have_types = db.check_inventory_for_type(type)
             
