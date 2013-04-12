@@ -16,10 +16,6 @@ def init_page_builder():
     env = jinja2.Environment(loader=loader)
 
 ########################################
-# template builder functions
-########################################
-
-########################################
 # content builder functions
 ########################################
 
@@ -68,6 +64,12 @@ def build_inventory():
     template = env.get_template('inventory.html')
     return template.render(vars)
 
+# build add inventory item form page
+def build_add_inventory_item():
+    # render the correct template
+    template = env.get_template('add_inventory_item.html')
+    return template.render()
+
 # build liquor types list page
 def build_liquor_types():
     list = []
@@ -88,6 +90,12 @@ def build_liquor_types():
     # render the correct template
     template = env.get_template('liquor_types.html')
     return template.render(vars)
+
+#build add liquor type form page
+def build_add_liquor_type():
+    # render the correct template
+    template = env.get_template('add_liquor_type.html')
+    return template.render()
 
 # build liquor amount conversion form page
 def build_liquor_conversion():

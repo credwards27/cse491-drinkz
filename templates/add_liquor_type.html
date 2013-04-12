@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Add Liquor Type{% endblock %}
+
+{% block pageTitle %}Add Liquor Type{% endblock %}
+
+{% block content %}
+
+<p><em>All fields required</em></p>
+
+<form action="recv_add_liquor_type">
+	<strong>Manufacturer:</strong> <input type="text" name="mfg" size="20" />
+	<br />
+	<strong>Liquor Name:</strong> <input type="text" name="liq" size="20" />
+	<br />
+	<strong>Liquor Type:</strong> <input type="text" name="typ" size="20" />
+	<br />
+	<input type="submit">
+</form>
+
+{% endblock %}

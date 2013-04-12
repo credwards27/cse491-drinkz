@@ -16,17 +16,25 @@ dispatch = {
     '/recipes.html' : 'recipes',
     '/inventory' : 'inventory',
     '/inventory.html' : 'inventory',
+    '/add_inventory_item' : 'add_inventory_item',
+    '/add_inventory_item.html' : 'add_inventory_item',
+    '/recv_add_inventory_item' : 'recv_add_inventory_item',
     '/liquor_types' : 'liquor_types',
     '/liquor_types.html' : 'liquor_types',
+    '/add_liquor_type' : 'add_liquor_type',
+    '/add_liquor_type.html' : 'add_liquor_type',
+    '/recv_add_liquor_type' : 'recv_add_liquor_type',
     '/convert_amount' : 'convert_amount',
     '/convert_amount.html' : 'convert_amount',
-    '/recv' : 'recv',
+    '/recv_conversion' : 'recv_conversion',
     '/error' : 'error',
     '/rpc' : 'dispatch_rpc'
 }
 
 # html headers for page encoding
 html_headers = [('Content-Type', 'text/html; charset=UTF-8')]
+
+path = None
 
 class SimpleApp(object):
     def __init__(self):
@@ -42,6 +50,7 @@ class SimpleApp(object):
         #print "CONTENT_LENGTH:", environ['CONTENT_LENGTH']
         #print "wsgi.input:", environ['wsgi.input']
         
+        global path
         path = environ['PATH_INFO']
         fn_name = dispatch.get(path, 'error')
         
@@ -70,8 +79,43 @@ class SimpleApp(object):
         start_response('200 OK', list(html_headers))
         return page_builder.build_inventory()
     
+    # add inventory item form
+    def add_inventory_item(self, environ, start_response):
+        start_response('200 OK', list(html_headers))
+        return page_builder.build_add_inventory_item()
+    
+    # add inventory item form handler
+    def recv_add_inventory_item(self, environ, start_response):
+        formdata = environ['QUERY_STRING']
+        results = urlparse.parse_qs(formdata)
+        
+        # add the form entries to the database
+        try:
+            drinkz.db.add_to_inventory("".join(results['mfg']), "".join(results['liq']), "".join(results['amt']))
+        except drinkz.db.LiquorMissing:
+            pass
+        
+        start_response('200 OK', list(html_headers))
+        return page_builder.build_inventory()
+    
     # liquor types list
     def liquor_types(self, environ, start_response):
+        start_response('200 OK', list(html_headers))
+        return page_builder.build_liquor_types()
+    
+    # add liquor type form
+    def add_liquor_type(self, environ, start_response):
+        start_response('200 OK', list(html_headers))
+        return page_builder.build_add_liquor_type()
+    
+    # add liquor type form handler
+    def recv_add_liquor_type(self, environ, start_response):
+        formdata = environ['QUERY_STRING']
+        results = urlparse.parse_qs(formdata)
+        
+        # add the form entries to the database
+        drinkz.db.add_bottle_type("".join(results['mfg']), "".join(results['liq']), "".join(results['typ']))
+        
         start_response('200 OK', list(html_headers))
         return page_builder.build_liquor_types()
     
@@ -81,10 +125,9 @@ class SimpleApp(object):
         return page_builder.build_liquor_conversion()
     
     # conversion form submission
-    def recv(self, environ, start_response):
+    def recv_conversion(self, environ, start_response):
         formdata = environ['QUERY_STRING']
         results = urlparse.parse_qs(formdata)
-        content_type = 'text/html'
         
         start_response('200 OK', list(html_headers))
         return page_builder.build_conversion_results(results['amount'][0])
@@ -94,7 +137,7 @@ class SimpleApp(object):
         content_type = 'text/plain'
         data = 'If "%s" does not appear in our records, it does not exist!' % path
         
-        start_response(status, list(html_headers))
+        start_response('404 Not Found', list(html_headers))
         return data
     
     ########################################

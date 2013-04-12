@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Add Inventory Item{% endblock %}
+
+{% block pageTitle %}Add Inventory Item{% endblock %}
+
+{% block content %}
+
+<p><em>All fields required</em></p>
+
+<form action="recv_add_inventory_item">
+	<strong>Manufacturer:</strong> <input type="text" name="mfg" size="20" />
+	<br />
+	<strong>Liquor Name:</strong> <input type="text" name="liq" size="20" />
+	<br />
+	<strong>Amount:</strong> <input type="text" name="amt" size="10" />
+	<br />
+	<em>Supported types: ounces, gallons, liters, milliliters</em>
+	<br />
+	<input type="submit">
+</form>
+
+{% endblock %}
