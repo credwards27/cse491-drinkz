@@ -29,7 +29,10 @@ dispatch = {
     '/recv_add_liquor_type' : 'recv_add_liquor_type',
     '/convert_amount' : 'convert_amount',
     '/convert_amount.html' : 'convert_amount',
+    '/convert_amount_post' : 'convert_amount_post',
+    '/convert_amount_post.html' : 'convert_amount_post',
     '/recv_conversion' : 'recv_conversion',
+    '/recv_conversion_post' : 'recv_conversion_post',
     '/error' : 'error',
     '/rpc' : 'dispatch_rpc'
 }
@@ -164,6 +167,11 @@ class SimpleApp(object):
         start_response('200 OK', list(html_headers))
         return page_builder.build_liquor_conversion()
     
+    # POST version of conversion form
+    def convert_amount_post(self, enviton, start_response):
+        start_response('200 OK', list(html_headers))
+        return page_builder.build_liquor_conversion_post()
+    
     # conversion form submission
     def recv_conversion(self, environ, start_response):
         formdata = environ['QUERY_STRING']
@@ -171,6 +179,38 @@ class SimpleApp(object):
         
         start_response('200 OK', list(html_headers))
         return page_builder.build_conversion_results(results['amount'][0])
+    
+    # POST conversion form submission
+    def recv_conversion_post(self, environ, start_response):
+        """if environ["REQUEST_METHOD"].upper() != "POST":
+            return error(environ, start_response)
+        
+        content_type = environ.get("CONTENT_TYPE", "application/x-www-form-urlencoded")
+        
+        if content_type.startswith("application/x-www-form-urlencoded") or content_type.startswith("multipart/form-data"):
+            input = environ["wsgi.input"]
+            post_form = environ.get("wsgi.post_form")
+            
+            if post_form is not None and post_form[0] is input:
+                return post_form[2]
+            
+            environ.setdefault("QUERY_STRING", "")
+            fs = cgi.FieldStorage(fp=input, environ=environ, keep_blank_values=1)
+            
+            new_input = InputProcessed("")
+            post_form = (new_input, input, fs)
+            
+            environ["wsgi.post_form"] = post_form
+            environ["wsgi.input"] = new_input
+            
+        else:
+            return error(environ, start_response)"""
+        
+        results = environ["wsgi.input"]
+        print "\n", results, "\n"
+        
+        start_response('200 OK', list(html_headers))
+        return page_builder.build_conversion_results_post(results['amount'][0])
     
     # unexpected request
     def error(self, environ, start_response):

@@ -109,6 +109,12 @@ def build_liquor_conversion():
     template = env.get_template('convert_to_ml.html')
     return template.render()
 
+# build POST version of liquor amount conversion form page
+def build_liquor_conversion_post():
+     # render the correct template
+    template = env.get_template('post_test.html')
+    return template.render()
+
 # build liquor amount conversion results page
 def build_conversion_results(in_amt):
     # run calculation
@@ -120,3 +126,7 @@ def build_conversion_results(in_amt):
     # render the correct template
     template = env.get_template('conversion_results.html')
     return template.render(vars)
+
+# build POST version of liquor amount conversion results page
+def build_conversion_results_post(in_amt):
+    return build_conversion_results(in_amt)

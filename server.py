@@ -45,10 +45,15 @@ while True:
     if "?" in path:
         path, query_string = path.split("?", 1)
     
+    post_message = ""
+    if request_type == "POST":
+        post_message = "hello world"
+    
     # build environ and start_response
     environ = {}
     environ["PATH_INFO"] = path
     environ["QUERY_STRING"] = query_string
+    environ["wsgi.input"] = post_message
     
     d = {}
     def start_response(status, headers):
