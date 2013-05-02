@@ -1,0 +1,48 @@
+Party Planning
+
+There are two new data structures implemented for party planning: events and venues.
+
+----- Venues -----
+
+Venues are simply location information for an event. They can be created directly, but they should be added to the database through the drinkz.db method. That method is:
+
+drinkz.db.add_venue(name, address, city, state, zipcode, description)
+name - Name of the venue
+address - Street address of the venue
+city - City in the U.S.
+state - State in the U.S.
+zipcode - Zipcode of the venue
+description - Brief description of the venue
+
+Venues can also be awarded points based on popularity. The methods, Venue.add_point() and Venue.remove_point() will add and remove one point from the venue respectively.
+
+----- Events -----
+
+Events are created a similar way, but they require a venue to exist first. The method for creating an event is:
+
+drinkz.db.add_event(name, host, venue, date, time)
+name - Name of the event
+host - Name of the person hosting the event
+venue - Venue object where the event will take place
+date - Date object for the day on which the event will take place
+time - Time object for the time at which the event will take place
+
+Events can also have drink requests and inventories. Drink requests indicate the types and amounts of liquor that the host is requesting people to bring to the event. An event's inventory is the liquor that either the host already has or that others have offered to bring.
+
+The method for adding liquor to the request list and inventory is:
+
+Event.add_to_event(dest, mfg, liq, amt)
+dest - Destination list for the liquor being added (request or inventory)
+mfg - Manufacturer of the liquor
+liq - Type of liquor
+amt - Amount of liquor
+
+The "dest" parameter must be either "req" for request or "inv" for inventory. Passing in "req" will add the liquor to the request list, while "inv" will add it to the inventory. A liquor type being added must already exist in the bottle types database to be valid.
+
+Events also have a method called Event.get_all(list) that will retrieve all entries from the specified list. The "list" parameter is similar to the "dest" parameter from Event.add_to_event(...) in that it specifies which list of items should be retrieved. The values "req" and "inv" will retrieve all items from the request list or inventory respectively.
+
+----- Additional Information -----
+
+Both of the methods for adding venues and events will add the venue or event to the database. The venue or event will not be added to the database if another with the same name already exists. No two venues or events can have the same name.
+
+The database also contains the methods, drinkz.db.get_all_events() and drinkz.db.get_all_venues() to retrieve a list of all events and venues respectively.

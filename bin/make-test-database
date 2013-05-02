@@ -11,8 +11,13 @@ the bin directory called "database_file"
 import sys
 import _mypath
 
+from datetime import date
+from datetime import time
+
 import drinkz.db
 import drinkz.recipes
+import drinkz.events
+import drinkz.venues
 from drinkz.convert import to_ml
 from drinkz.app import SimpleApp
 
@@ -30,6 +35,23 @@ a = drinkz.recipes.Recipe('scotch on the rocks', [('blended scotch','4 oz')])
 drinkz.db.add_recipe(a)
 b = drinkz.recipes.Recipe('black label on the rocks', [('Black Label','6 oz')])
 drinkz.db.add_recipe(b)
+
+# add dummy venue
+name1 = "Happy House"
+address = "42 Happy St."
+city = "Coolville"
+state = "Michigan"
+zip = 45678
+description = "A really happy place that is happy and stuff"
+v = drinkz.db.add_venue(name1, address, city, state, zip, description)
+
+# add dummy event
+name2 = "Crazy Party"
+host = "Old Gregg"
+venue = v
+date = date(2013, 5, 5)
+time = time(22, 0)
+e = drinkz.db.add_event(name2, host, venue, date, time)
 
 def main(args):
     filename = args[1]
